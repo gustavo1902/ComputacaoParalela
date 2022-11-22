@@ -1,1 +1,1 @@
-# Computa-oParalela
+# Computação Paralela
