@@ -1,1 +1,3 @@
-# Códigos realizados no decorrer da disciplina de Computação Paralela
+# Computação Paralela
+
+Códigos realizados no decorrer da disciplina de Computação Paralela
