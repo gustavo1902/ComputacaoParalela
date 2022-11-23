@@ -36,27 +36,28 @@ class RecursoREST:
 
 # CUSTOM: seletor de imagens
 class RecursoImagemREST:
-    def before_hook_image(req, res, resources): 
-        print("rotacionar imagem")
-    @falcon.after(before_hook_image)
-    def on_get(self, req, resp):
-
     
-        mapa_imagens={"1":"moyai.jpg","2":"floppa-amogus.jpg", "3": "pudim.jpg"}
+    def before_gira(req, res, resource):
+        #res.stream=Image.open(requests.get("http://pudim.com.br/pudim.jpg").content).rotate(90)
+        # This portion is part of my test code
+        byteImgIO = io.BytesIO()
+        byteImg = Image.open(res.stream).rotate(90)
+        byteImg.save(byteImgIO, "PNG")
+        byteImgIO.seek(0)
+        byteImg = byteImgIO.read()
+        res.stream = io.BytesIO(byteImg)
+        # Non test code
+        #dataBytesIO = io.BytesIO(byteImg)
+        #Image.open(dataBytesIO)
+    @falcon.after(before_gira)
+    def on_get(self, req, resp):
+        mapa_imagens={"1":"moyai.jpg","2":"floppa-amogus.jpg"}
         identificador=req.get_param("id")
-        if(identificador=="3"):
-            #mapa_imagens=Image.open("pudim.jpg")
-            #mapa_imagens=imagem.rotate(90)
-
-            #resp.content_type = falcon.MEDIA_JPEG
-            #resp.stream = io.BytesIO(mapa_imagens)
-
-            resp.stream = io.BytesIO(requests.get("http://pudim.com.br/pudim.jpg?id=3").content)
-            
-        #if(identificador == 'pudim'):
-         #   resp.content_type=falcon.MEDIA_JPEG
-          #  resp.stream=io.BytesIO(requests.get("http://pudim.com.br/pudim.jpg").content)
-           
+        print("identificador de imagem: ", identificador)
+        imagem=''
+        if(identificador == 'pudim'):
+            resp.content_type=falcon.MEDIA_JPEG
+            resp.stream=io.BytesIO(requests.get("http://pudim.com.br/pudim.jpg").content)
         else:
             try:
                resp.content_type=falcon.MEDIA_JPEG
@@ -67,11 +68,6 @@ class RecursoImagemREST:
                 resp.status=falcon.HTTP_404
                 resp.content_type=falcon.MEDIA_TEXT
                 resp.text=('não foi possível carregar a imagem.')
-        print("identificador de imagem: ", identificador)
-        imagem=''
-        print("identificador de imagem: ", identificador)
-        imagem=''
-
         
 
 
